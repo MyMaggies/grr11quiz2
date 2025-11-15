@@ -982,7 +982,7 @@
                 </div>
                 <div class="hint" id="hint-peel">
                     <strong>Structure:</strong> Point (1) + Evidence (1) + Explanation (2) + Link (1) = 5 marks<br>
-                    <strong>Focus on:</strong> The metaphor "toxic cycle" in paragraph 2<br>
+                    <strong>Focus on:</strong> Personal pronouns like "me" and "we" in paragraph 1<br>
                     <strong>Tip:</strong> Tap/click words from the word bank, then tap/click the blanks!
                 </div>
 
@@ -992,13 +992,13 @@
                     </div>
 
                     <div class="cloze-text" id="clozeText">
-                        <strong>Point:</strong> The author uses the <span class="blank" data-answer="metaphor"></span> "become a <span class="blank" data-answer="toxic"></span> <span class="blank" data-answer="cycle"></span>" in paragraph 2 to support the viewpoint that fast fashion is <span class="blank" data-answer="destructive"></span>.
+                        <strong>Point:</strong> The author uses <span class="blank" data-answer="personal"></span> <span class="blank" data-answer="pronouns"></span> like "<span class="blank" data-answer="me"></span>" and "<span class="blank" data-answer="we"></span>" to <span class="blank" data-answer="connect"></span> with readers.
                         <br><br>
-                        <strong>Evidence:</strong> The full quote from paragraph 2 states: "Not anymore. Fast fashion has also become a toxic cycle."
+                        <strong>Evidence:</strong> In paragraph 1, the author states "educators like me have argued that fast fashion's biggest threat was its ability to filch money from teenagers."
                         <br><br>
-                        <strong>Explanation:</strong> This metaphor <span class="blank" data-answer="powerfully"></span> <span class="blank" data-answer="conveys"></span> how fast fashion creates a <span class="blank" data-answer="harmful"></span> and <span class="blank" data-answer="repetitive"></span> pattern of behavior. By describing it as a cycle, the author suggests that consumers become <span class="blank" data-answer="trapped"></span> in endless <span class="blank" data-answer="consumption"></span> with no easy <span class="blank" data-answer="escape"></span>. The word "toxic" emphasizes the dangerous and damaging nature of this pattern.
+                        <strong>Explanation:</strong> By using "me," the author shows they have direct <span class="blank" data-answer="experience"></span> with this problem. This makes the message more <span class="blank" data-answer="trustworthy"></span> and <span class="blank" data-answer="personal"></span>. The pronoun "we" in "We've long understood" <span class="blank" data-answer="includes"></span> the <span class="blank" data-answer="reader"></span> in the discussion, making them feel part of the issue.
                         <br><br>
-                        <strong>Link:</strong> Through this metaphor, the author effectively positions fast fashion as a self-perpetuating problem that requires conscious intervention to break.
+                        <strong>Link:</strong> These personal pronouns help the author build <span class="blank" data-answer="trust"></span> and make readers <span class="blank" data-answer="care"></span> about fast fashion's harmful effects.
                     </div>
                 </div>
             </div>
@@ -1029,9 +1029,9 @@
                 <p><strong>"How does the author use stylistic devices to support the author's viewpoint?"</strong></p>
                 <h4 style="margin-top: 15px;">✅ Requirements (5 marks):</h4>
                 <ul>
-                    <li><strong>Point (1 mark):</strong> Identify the metaphor "toxic cycle" and state the viewpoint</li>
-                    <li><strong>Evidence (1 mark):</strong> Quote paragraph 2 fully</li>
-                    <li><strong>Explanation (2 marks):</strong> Explain how the metaphor conveys harm and repetition</li>
+                    <li><strong>Point (1 mark):</strong> Identify personal pronouns and state the viewpoint</li>
+                    <li><strong>Evidence (1 mark):</strong> Quote paragraph 1 with "educators like me"</li>
+                    <li><strong>Explanation (2 marks):</strong> Explain how pronouns build connection and trust</li>
                     <li><strong>Link (1 mark):</strong> Connect back to the argument about fast fashion</li>
                 </ul>
             </div>
@@ -1051,9 +1051,9 @@
             tf: { tf1: 'true', tf2: 'true', tf3: 'true', tf4: 'true', tf5: 'true' }
         };
 
-        // Cloze words
-        const clozeWords = ['metaphor', 'toxic', 'cycle', 'destructive', 'powerfully', 'conveys', 'harmful', 'repetitive', 'trapped', 'consumption', 'escape'];
-        const redHerrings = ['simile', 'positive', 'pattern', 'beneficial', 'weakly', 'hides', 'helpful', 'single', 'free', 'saving', 'continue'];
+        // Cloze words - NEW VERSION WITH PERSONAL PRONOUNS
+        const clozeWords = ['personal', 'pronouns', 'me', 'we', 'connect', 'experience', 'trustworthy', 'personal', 'includes', 'reader', 'trust', 'care'];
+        const redHerrings = ['impersonal', 'nouns', 'they', 'it', 'distance', 'inexperience', 'doubtful', 'formal', 'excludes', 'writer', 'doubt', 'ignore'];
         const allWords = [...clozeWords, ...redHerrings].sort(() => Math.random() - 0.5);
 
         // Track scoring
@@ -1171,7 +1171,7 @@
                 blank.style.backgroundColor = '#d4edda';
                 blank.style.borderColor = '#28a745';
                 if (isFirstAttempt) {
-                    earnedPoints.cloze += (5 / clozeWords.length);
+                    earnedPoints.cloze += (5 / 13); // 13 blanks total
                 }
             } else {
                 blank.style.backgroundColor = '#f8d7da';
@@ -1266,8 +1266,8 @@
 
         function submitBossLevel() {
             const answer = document.getElementById('bossAnswer').value;
-            if (answer.trim().length < 100) {
-                alert('Your answer seems too short. A PEEL paragraph should be at least 100 words.');
+            if (answer.trim().length < 50) {
+                alert('Your answer seems too short. A PEEL paragraph should be at least 50 words.');
                 return;
             }
             const resultDisplay = document.getElementById('bossResult');
@@ -1275,9 +1275,9 @@
                 <strong>✅ Boss Level Submitted!</strong><br>
                 Your answer has been recorded for review.<br><br>
                 <strong>Self-Check:</strong><br>
-                ✓ Did you include a clear Point?<br>
-                ✓ Did you provide specific Evidence (a quote)?<br>
-                ✓ Did you Explain HOW the device supports the viewpoint?<br>
+                ✓ Did you include a clear Point about personal pronouns?<br>
+                ✓ Did you provide specific Evidence (a quote with "me" or "we")?<br>
+                ✓ Did you Explain HOW the pronouns connect with readers?<br>
                 ✓ Did you Link back to the main argument?<br><br>
                 Word count: ${answer.split(/\s+/).length} words
             `;
