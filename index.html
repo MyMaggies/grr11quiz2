@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Fashion Comprehension Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .content.hidden {
+            display: none;
+        }
+
+        .passage {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            border-left: 5px solid #667eea;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .passage h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .passage p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .passage em {
+            font-style: italic;
+            color: #666;
+        }
+
+        .passage strong {
+            color: #333;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 1.5em;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .question {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .question:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .hint-toggle {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+            min-height: 40px;
+            min-width: 120px;
+        }
+
+        .hint-toggle:hover {
+            background: #5568d3;
+        }
+
+        .hint {
+            display: none;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+
+        .hint.show {
+            display: block;
+        }
+
+        .reference-toggle {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+            min-height: 40px;
+            min-width: 140px;
+        }
+
+        .reference-toggle:hover {
+            background: #218838;
+        }
+
+        .reference-box {
+            display: none;
+            background: #e7f5e7;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 0.95em;
+            max-height: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .reference-box.show {
+            display: block;
+        }
+
+        .reference-box strong {
+            color: #28a745;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            min-height: 48px;
+            -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .option:hover {
+            background: #e7f0ff;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .tf-question {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .tf-button {
+            flex: 1;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+            min-height: 48px;
+            -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .tf-button:hover {
+            background: #e7f0ff;
+            border-color: #667eea;
+        }
+
+        .tf-button.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .tf-button.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .cloze-container {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 2px dashed #667eea;
+            justify-content: center;
+        }
+
+        .word-bank-title {
+            width: 100%;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .word-chip {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: move;
+            user-select: none;
+            transition: all 0.3s;
+            font-size: 0.9em;
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .word-chip:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .word-chip.dragging {
+            opacity: 0.5;
+        }
+
+        .word-chip.selected-touch {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            background: #5568d3;
+        }
+
+        .word-chip.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .cloze-text {
+            line-height: 2;
+            font-size: 1.05em;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            min-height: 36px;
+            padding: 5px 10px;
+            border-bottom: 2px solid #667eea;
+            margin: 0 5px;
+            cursor: pointer;
+            background: white;
+            border-radius: 4px;
+            transition: all 0.3s;
+            -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2);
+            vertical-align: middle;
+        }
+
+        .blank:hover {
+            background: #e7f0ff;
+        }
+
+        .blank.filled {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .blank.drag-over {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            width: 100%;
+            transition: transform 0.3s;
+            min-height: 50px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .score-display {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #155724;
+            display: none;
+        }
+
+        .score-display.show {
+            display: block;
+        }
+
+        .boss-level-unlock {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: 3px solid #f5576c;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .boss-level-unlock.show {
+            display: block;
+        }
+
+        .boss-level-unlock h3 {
+            color: #fff;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .boss-level-unlock p {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .boss-btn {
+            background: white;
+            color: #f5576c;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+            min-height: 50px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(245, 87, 108, 0.2);
+        }
+
+        .boss-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .boss-textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 20px;
+            font-size: 1.05em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+
+        .boss-rubric {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+
+        .boss-rubric h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .boss-rubric ul {
+            margin-left: 20px;
+            color: #856404;
+        }
+
+        .back-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 1em;
+            min-height: 40px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .back-button:hover {
+            background: #5568d3;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { border-radius: 10px; }
+            .content { padding: 15px; }
+            .header { padding: 20px 15px; }
+            .header h1 { font-size: 1.4em; }
+            .header p { font-size: 0.9em; }
+            .word-chip { padding: 10px 18px; font-size: 1em; min-width: 80px; }
+            .blank { min-width: 100px; padding: 8px 12px; font-size: 1em; margin: 3px; }
+            .passage { padding: 20px 15px; font-size: 0.95em; }
+            .question { padding: 15px; }
+            .question-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .question-text { min-width: 100%; margin-bottom: 5px; font-size: 0.95em; }
+            .hint-toggle, .reference-toggle { width: 100%; padding: 10px 15px; font-size: 1em; }
+            .hint, .reference-box { font-size: 0.9em; padding: 12px; }
+            .reference-box { max-height: 300px; }
+            .section-title { font-size: 1.2em; margin: 20px 0 15px 0; }
+            .option { padding: 12px; font-size: 0.95em; }
+            .tf-button { padding: 12px; font-size: 1em; }
+            .submit-btn { padding: 12px 30px; font-size: 1em; }
+            .score-display { font-size: 1em; padding: 15px; }
+            .boss-level-unlock { padding: 20px; }
+            .boss-level-unlock h3 { font-size: 1.4em; }
+            .boss-level-unlock p { font-size: 1em; }
+            .boss-btn { padding: 12px 30px; font-size: 1em; width: 100%; }
+            .boss-textarea { min-height: 300px; font-size: 1em; padding: 15px; }
+            .boss-rubric { padding: 15px; font-size: 0.9em; }
+            .cloze-container { padding: 15px; }
+            .word-bank { padding: 15px; }
+            .cloze-text { font-size: 1em; line-height: 1.8; }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.2em; }
+            .passage { padding: 15px 10px; font-size: 0.9em; }
+            .question { padding: 12px; }
+            .question-text { font-size: 0.9em; }
+            .section-title { font-size: 1.1em; }
+            .word-chip { padding: 8px 12px; font-size: 0.9em; min-width: 70px; }
+            .blank { min-width: 90px; padding: 6px 10px; font-size: 0.9em; }
+            .boss-textarea { min-height: 250px; font-size: 0.95em; }
+            .reference-box { max-height: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👗 Fast Fashion Comprehension Test</h1>
+            <p>Time allotted: 60 minutes | Total: 20 marks</p>
+        </div>
+
+        <div class="content" id="mainQuiz">
+            <div class="passage">
+                <h2>HOW FAST FASHION IS A TOXIC TREND</h2>
+                
+                <p><strong>1.</strong> We've long understood that advertising, magazines and celebrity culture damage teens' sense of financial responsibility by enforcing a 'buy more' mentality. Lesser known is the impact of fast fashion on environmental awareness and ethical consumption. With the explosive growth of online shopping platforms, most parents spend considerable time managing delivery notifications and addressing impulse purchases, making sure their kids think before they buy and understand the consequences of disposable fashion. For at least a decade, educators like me have argued that fast fashion's biggest threat was its ability to filch money from teenagers with the lure of cheap, trendy clothing that falls apart after minimal wear.</p>
+
+                <p><strong>2.</strong> Not anymore. Fast fashion has also become a toxic cycle.</p>
+
+                <p><strong>3.</strong> Earlier this year, environmental scientists found robust cross-cultural evidence linking fast fashion consumption to resource depletion, waste accumulation, exploitative labor practices, and significant carbon emissions worldwide. Note: that doesn't mean buying affordable clothing <em>causes</em> all these problems, but that there's a strong association between them.</p>
+
+                <p><strong>4.</strong> Retail platforms like SHEIN, Fashion Nova and Temu deliver the tools that allow teens to constantly refresh their wardrobes and participate in micro-trends that last mere weeks. The most vulnerable consumers, researchers say, are the ones who spend most of their time browsing, purchasing multiple hauls weekly, and posting outfit content online. One study found that teenage shoppers who did this on these platforms were more likely to link their self-worth to their appearance and trend participation. Interestingly, whilst girls report more fashion shopping, studies have shown that members of both genders can be equally affected by compulsive buying behaviors.</p>
+
+                <p><strong>5.</strong> And thanks to an array of mobile apps and one-click purchasing, fast fashion retailers now have the power to reach consumers in ways that are practically on par with addictive social media platforms. If the Internet has been called a great marketplace, perhaps what fast fashion companies have done is let anyone enter the constant style refresh cycle. Teens can browse thousands of items, receive personalized recommendations and track shipping in real-time with the swipe of a finger, curating their own image to become trendier, more stylish and more 'relevant'.</p>
+
+                <p><strong>6.</strong> All this provides an illusion of empowerment: if I spend more time shopping and really build my wardrobe, I can express myself. 'I don't get to choose my body type or natural features,' one young woman told me. 'If I could, my proportions would be different. But I can choose which outfit makes me look better.'</p>
+
+                <p><strong>7.</strong> But invariably, the line between self-expression and consumption becomes blurred. 'I think it affects teens subconsciously, just seeing how quickly trends change and feeling like their clothes are never good enough,' one 16-year-old told me.</p>
+
+                <p><strong>8.</strong> What teens purchase through fast fashion is overshadowed by what they ignore. Pre-Internet, you had to travel to physical stores to find affordable clothing – a process that required effort and limited spontaneous purchases. Now the barriers are as minimal as they are enticing. Teens can scroll endlessly through new arrivals whilst garment workers in distant factories labor in dangerous conditions. Quality concerns vanish in favor of quantity. Environmental impact gets dismissed. The stigmatisation of wearing the same outfit twice becomes normalized, reinforcing the endless buying cycle.</p>
+
+                <p><strong>9.</strong> The meteoric rise of ultra-fast fashion online has created an entire culture of 'haul' videos and disposable trends. Millions of followers embrace frequent purchasing for entertainment and validation, increasingly treating clothing as single-use rather than long-term investment. This year, an analysis of 50 major fashion influencer accounts revealed content that was indistinguishable, at times, from promotion of wasteful consumption or environmental negligence. Both contained strong messaging encouraging weekly shopping sprees and linking personal value to constant wardrobe updates, and promoted the idea that affordable prices justify unlimited purchasing. Writing in <em>Vogue</em>, 24-year-old sustainability advocate Emma Rodriguez recounted how an obsession with fast fashion enabled her to ignore her growing debt and overflowing closet of unworn items. 'I had found my style,' she wrote. 'I was not thinking about consequences.'</p>
+
+                <p><strong>10.</strong> Many teens are environmentally aware about climate change: they can identify problems like pollution with a critical eye. Less clear is how environmental literacy translates to understanding their own consumption patterns. The older adolescents I work with often dismiss conversations about fashion's ecological impact with a 'whatever' or 'I know that already'. That doesn't mean they're not listening, or feeling conflicted about their purchasing habits. (Besides, this population is hardly famous for accepting lectures on restraint.)</p>
+
+                <p><strong>11.</strong> So what can parents do? Ask teens their opinion of how fashion companies manipulate buyer behavior: Why do brands release new items daily? What do they gain, and from whom? Sometimes just naming a tactic as manipulative can make a young adult feel less pressured to participate. It never hurts to tell teens that they matter more than their wardrobe. As they scroll through shopping apps, a good old-fashioned 'I love you exactly as you are' may be more timely than ever.</p>
+
+                <p><em>[Adapted from www.theguardian.com]</em></p>
+            </div>
+
+            <h2 class="section-title">Multiple Choice Questions (10 marks)</h2>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">1. Who does the text target?</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc1')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc1')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc1">
+                    <strong>How to solve:</strong> Look at who the article is speaking to directly. Notice phrases like "So what can parents do?" Who is being given advice?
+                </div>
+                <div class="reference-box" id="ref-mc1">
+                    <strong>Reference - Paragraph 11:</strong>
+                    <p>"So what can parents do? Ask teens their opinion of how fashion companies manipulate buyer behavior..."</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q1')">
+                        <input type="radio" name="q1" value="a"> (a) Parents
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q1')">
+                        <input type="radio" name="q1" value="b"> (b) Teenagers
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q1')">
+                        <input type="radio" name="q1" value="c"> (c) The general public especially people who shop online
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q1')">
+                        <input type="radio" name="q1" value="d"> (d) People who work in fashion retail
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">2. The text is an example of</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc2')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc2')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc2">
+                    <strong>How to solve:</strong> Look at the source citation and writing style. What type appears on The Guardian?
+                </div>
+                <div class="reference-box" id="ref-mc2">
+                    <strong>Reference - Footer:</strong>
+                    <p><em>"[Adapted from www.theguardian.com]"</em></p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q2')">
+                        <input type="radio" name="q2" value="a"> (a) An advertisement
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q2')">
+                        <input type="radio" name="q2" value="b"> (b) A propaganda piece
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q2')">
+                        <input type="radio" name="q2" value="c"> (c) An adapted extract from an online editorial/magazine
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q2')">
+                        <input type="radio" name="q2" value="d"> (d) An extract from a scientific journal
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">3. The main purpose of the text is</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc3')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc3')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc3">
+                    <strong>How to solve:</strong> What is the overall message? Look at the title and main arguments.
+                </div>
+                <div class="reference-box" id="ref-mc3">
+                    <strong>Reference - Title & Paragraph 3:</strong>
+                    <p><strong>Title:</strong> "HOW FAST FASHION IS A TOXIC TREND"</p>
+                    <p><strong>Paragraph 3:</strong> "Earlier this year, environmental scientists found robust cross-cultural evidence linking fast fashion consumption to resource depletion, waste accumulation, exploitative labor practices, and significant carbon emissions worldwide."</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q3')">
+                        <input type="radio" name="q3" value="a"> (a) To inform about the disadvantages of fast fashion on society and environment
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q3')">
+                        <input type="radio" name="q3" value="b"> (b) To comment on shopping habits of teenagers
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q3')">
+                        <input type="radio" name="q3" value="c"> (c) To entertain families regarding online shopping
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q3')">
+                        <input type="radio" name="q3" value="d"> (d) To promote SHEIN, Fashion Nova and Temu
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">4. The author persuades the audience through the use of</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc4')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc4')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc4">
+                    <strong>How to solve:</strong> Look for Ethos (credibility), Pathos (emotion), and Logos (logic). Are all three present?
+                </div>
+                <div class="reference-box" id="ref-mc4">
+                    <strong>Examples of persuasive techniques:</strong>
+                    <p><strong>Ethos:</strong> "educators like me", "environmental scientists found"</p>
+                    <p><strong>Pathos:</strong> "garment workers in distant factories labor in dangerous conditions"</p>
+                    <p><strong>Logos:</strong> Research evidence, statistics, logical arguments</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q4')">
+                        <input type="radio" name="q4" value="a"> (a) Ethos
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q4')">
+                        <input type="radio" name="q4" value="b"> (b) Pathos
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q4')">
+                        <input type="radio" name="q4" value="c"> (c) Logos
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q4')">
+                        <input type="radio" name="q4" value="d"> (d) All three
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">5. The word "filch" means</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc5')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc5')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc5">
+                    <strong>How to solve:</strong> Find it in paragraph 1. If something "filches money", what does that mean?
+                </div>
+                <div class="reference-box" id="ref-mc5">
+                    <strong>Reference - Paragraph 1:</strong>
+                    <p>"For at least a decade, educators like me have argued that fast fashion's biggest threat was its ability to filch money from teenagers with the lure of cheap, trendy clothing that falls apart after minimal wear."</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q5')">
+                        <input type="radio" name="q5" value="a"> (a) dangerous to approach
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q5')">
+                        <input type="radio" name="q5" value="b"> (b) to tear apart
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q5')">
+                        <input type="radio" name="q5" value="c"> (c) to "steal" something
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q5')">
+                        <input type="radio" name="q5" value="d"> (d) to buy
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">6. The language register used in the text is</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc6')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc6')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc6">
+                    <strong>How to solve:</strong> Is it very academic (formal)? Casual with slang (informal)? Or somewhere in between (semi-formal)?
+                </div>
+                <div class="reference-box" id="ref-mc6">
+                    <strong>Reference - Overall language style:</strong>
+                    <p>The text uses accessible but sophisticated language, personal pronouns, and balances technical terms with conversational tone.</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q6')">
+                        <input type="radio" name="q6" value="a"> (a) formal
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q6')">
+                        <input type="radio" name="q6" value="b"> (b) neutral
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q6')">
+                        <input type="radio" name="q6" value="c"> (c) semi-formal
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q6')">
+                        <input type="radio" name="q6" value="d"> (d) informal
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">7. The tone of the text is</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc7')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc7')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc7">
+                    <strong>How to solve:</strong> What's the author's attitude? Joking? Remembering fondly? Discussing important concerns? Expecting the worst?
+                </div>
+                <div class="reference-box" id="ref-mc7">
+                    <strong>Reference - Overall tone:</strong>
+                    <p>The article addresses genuine concerns about environmental and social impacts with a measured, concerned approach.</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q7')">
+                        <input type="radio" name="q7" value="a"> (a) serious
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q7')">
+                        <input type="radio" name="q7" value="b"> (b) humorous
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q7')">
+                        <input type="radio" name="q7" value="c"> (c) nostalgic
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q7')">
+                        <input type="radio" name="q7" value="d"> (d) pessimistic
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">8. The word 'stigmatisation' in paragraph 8 in context also means</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc8')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc8')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc8">
+                    <strong>How to solve:</strong> Context: "The stigmatisation of wearing the same outfit twice". Stigmatisation means strong disapproval or harsh judgment.
+                </div>
+                <div class="reference-box" id="ref-mc8">
+                    <strong>Reference - Paragraph 8:</strong>
+                    <p>"The stigmatisation of wearing the same outfit twice becomes normalized, reinforcing the endless buying cycle."</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q8')">
+                        <input type="radio" name="q8" value="a"> (a) greatness
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q8')">
+                        <input type="radio" name="q8" value="b"> (b) celebration
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q8')">
+                        <input type="radio" name="q8" value="c"> (c) condemnation
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q8')">
+                        <input type="radio" name="q8" value="d"> (d) roughness
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">9. What do you understand by the expression "the explosive growth of online shopping platforms"?</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc9')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc9')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc9">
+                    <strong>How to solve:</strong> "Explosive growth" = rapid, dramatic increase
+                </div>
+                <div class="reference-box" id="ref-mc9">
+                    <strong>Reference - Paragraph 1:</strong>
+                    <p>"With the explosive growth of online shopping platforms, most parents spend considerable time managing delivery notifications and addressing impulse purchases..."</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q9')">
+                        <input type="radio" name="q9" value="a"> (a) That more people now shop online
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q9')">
+                        <input type="radio" name="q9" value="b"> (b) That online platforms are dangerous
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q9')">
+                        <input type="radio" name="q9" value="c"> (c) People who shop online are numerous
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q9')">
+                        <input type="radio" name="q9" value="d"> (d) Old people should not shop online
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">10. Refer to paragraph 8. "What teens purchase through fast fashion...." The writer's tone in this paragraph is:</div>
+                    <button class="hint-toggle" onclick="toggleHint('mc10')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('mc10')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-mc10">
+                    <strong>How to solve:</strong> Is the author judging (critical)? Using irony (satirical)? Or both?
+                </div>
+                <div class="reference-box" id="ref-mc10">
+                    <strong>Reference - Paragraph 8:</strong>
+                    <p>"What teens purchase through fast fashion is overshadowed by what they ignore. Pre-Internet, you had to travel to physical stores... Now the barriers are as minimal as they are enticing. Teens can scroll endlessly through new arrivals whilst garment workers in distant factories labor in dangerous conditions."</p>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'q10')">
+                        <input type="radio" name="q10" value="a"> (a) Critical
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q10')">
+                        <input type="radio" name="q10" value="b"> (b) Satirical
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q10')">
+                        <input type="radio" name="q10" value="c"> (c) Angry
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'q10')">
+                        <input type="radio" name="q10" value="d"> (d) Both A and B
+                    </label>
+                </div>
+            </div>
+
+            <h2 class="section-title">True/False Questions (5 marks)</h2>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">11. One of the effects of fast fashion is that it affects environmental sustainability.</div>
+                    <button class="hint-toggle" onclick="toggleHint('tf1')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('tf1')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-tf1">
+                    <strong>How to solve:</strong> Look at paragraph 3 for environmental impacts.
+                </div>
+                <div class="reference-box" id="ref-tf1">
+                    <strong>Reference - Paragraph 3:</strong>
+                    <p>"Earlier this year, environmental scientists found robust cross-cultural evidence linking fast fashion consumption to resource depletion, waste accumulation, exploitative labor practices, and significant carbon emissions worldwide."</p>
+                </div>
+                <div class="tf-question">
+                    <div class="tf-button" onclick="selectTF(this, 'tf1', 'true')">TRUE</div>
+                    <div class="tf-button" onclick="selectTF(this, 'tf1', 'false')">FALSE</div>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">12. "Fast fashion has also become a toxic cycle". The word "toxic" is used to emphasize how harmful fast fashion has become.</div>
+                    <button class="hint-toggle" onclick="toggleHint('tf2')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('tf2')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-tf2">
+                    <strong>How to solve:</strong> What does "toxic" mean? Harmful/poisonous, right?
+                </div>
+                <div class="reference-box" id="ref-tf2">
+                    <strong>Reference - Paragraph 2:</strong>
+                    <p>"Not anymore. Fast fashion has also become a toxic cycle."</p>
+                </div>
+                <div class="tf-question">
+                    <div class="tf-button" onclick="selectTF(this, 'tf2', 'true')">TRUE</div>
+                    <div class="tf-button" onclick="selectTF(this, 'tf2', 'false')">FALSE</div>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">13. The text confirms that modern fashion culture encourages viewing clothes as temporary rather than lasting purchases.</div>
+                    <button class="hint-toggle" onclick="toggleHint('tf3')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('tf3')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-tf3">
+                    <strong>How to solve:</strong> Check paragraph 9 about "single-use rather than long-term investment"
+                </div>
+                <div class="reference-box" id="ref-tf3">
+                    <strong>Reference - Paragraph 9:</strong>
+                    <p>"Millions of followers embrace frequent purchasing for entertainment and validation, increasingly treating clothing as single-use rather than long-term investment."</p>
+                </div>
+                <div class="tf-question">
+                    <div class="tf-button" onclick="selectTF(this, 'tf3', 'true')">TRUE</div>
+                    <div class="tf-button" onclick="selectTF(this, 'tf3', 'false')">FALSE</div>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">14. A synonym for the word "toxic" as used in the text, is "harmful".</div>
+                    <button class="hint-toggle" onclick="toggleHint('tf4')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('tf4')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-tf4">
+                    <strong>How to solve:</strong> Is "toxic" similar in meaning to "harmful"?
+                </div>
+                <div class="reference-box" id="ref-tf4">
+                    <strong>Reference - Paragraph 2:</strong>
+                    <p>"Not anymore. Fast fashion has also become a toxic cycle."</p>
+                    <p>Toxic = poisonous, harmful, damaging</p>
+                </div>
+                <div class="tf-question">
+                    <div class="tf-button" onclick="selectTF(this, 'tf4', 'true')">TRUE</div>
+                    <div class="tf-button" onclick="selectTF(this, 'tf4', 'false')">FALSE</div>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">15. The concluding paragraph is cautionary and advisory where the writer gives constructive advice to parents.</div>
+                    <button class="hint-toggle" onclick="toggleHint('tf5')">💡 Show Hint</button>
+                    <button class="reference-toggle" onclick="toggleReference('tf5')">📖 Show Reference</button>
+                </div>
+                <div class="hint" id="hint-tf5">
+                    <strong>How to solve:</strong> Does paragraph 11 warn and advise parents?
+                </div>
+                <div class="reference-box" id="ref-tf5">
+                    <strong>Reference - Paragraph 11:</strong>
+                    <p>"So what can parents do? Ask teens their opinion of how fashion companies manipulate buyer behavior... Sometimes just naming a tactic as manipulative can make a young adult feel less pressured to participate. It never hurts to tell teens that they matter more than their wardrobe."</p>
+                </div>
+                <div class="tf-question">
+                    <div class="tf-button" onclick="selectTF(this, 'tf5', 'true')">TRUE</div>
+                    <div class="tf-button" onclick="selectTF(this, 'tf5', 'false')">FALSE</div>
+                </div>
+            </div>
+
+            <h2 class="section-title">PEEL Paragraph (5 marks)</h2>
+
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-text">How does the author use stylistic devices to support the author's viewpoint?</div>
+                    <button class="hint-toggle" onclick="toggleHint('peel')">💡 Show Hint</button>
+                </div>
+                <div class="hint" id="hint-peel">
+                    <strong>Structure:</strong> Point (1) + Evidence (1) + Explanation (2) + Link (1) = 5 marks<br>
+                    <strong>Focus on:</strong> The metaphor "toxic cycle" in paragraph 2<br>
+                    <strong>Tip:</strong> Tap/click words from the word bank, then tap/click the blanks!
+                </div>
+
+                <div class="cloze-container">
+                    <div class="word-bank" id="wordBank">
+                        <div class="word-bank-title">📝 Word Bank - Tap a word, then tap a blank to fill it</div>
+                    </div>
+
+                    <div class="cloze-text" id="clozeText">
+                        <strong>Point:</strong> The author uses the <span class="blank" data-answer="metaphor"></span> "become a <span class="blank" data-answer="toxic"></span> <span class="blank" data-answer="cycle"></span>" in paragraph 2 to support the viewpoint that fast fashion is <span class="blank" data-answer="destructive"></span>.
+                        <br><br>
+                        <strong>Evidence:</strong> The full quote from paragraph 2 states: "Not anymore. Fast fashion has also become a toxic cycle."
+                        <br><br>
+                        <strong>Explanation:</strong> This metaphor <span class="blank" data-answer="powerfully"></span> <span class="blank" data-answer="conveys"></span> how fast fashion creates a <span class="blank" data-answer="harmful"></span> and <span class="blank" data-answer="repetitive"></span> pattern of behavior. By describing it as a cycle, the author suggests that consumers become <span class="blank" data-answer="trapped"></span> in endless <span class="blank" data-answer="consumption"></span> with no easy <span class="blank" data-answer="escape"></span>. The word "toxic" emphasizes the dangerous and damaging nature of this pattern.
+                        <br><br>
+                        <strong>Link:</strong> Through this metaphor, the author effectively positions fast fashion as a self-perpetuating problem that requires conscious intervention to break.
+                    </div>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="submitTest()">📊 Submit Test</button>
+
+            <div class="score-display" id="scoreDisplay"></div>
+
+            <div class="boss-level-unlock" id="bossUnlock">
+                <h3>🏆 BOSS LEVEL UNLOCKED!</h3>
+                <p>Think you've mastered it? Now write the PEEL paragraph from scratch!</p>
+                <button class="boss-btn" onclick="startBossLevel()">Accept Challenge 💪</button>
+            </div>
+        </div>
+
+        <div class="content hidden" id="bossLevel">
+            <button class="back-button" onclick="backFromBoss()">← Back to Results</button>
+            
+            <h2 style="color: #f5576c; text-align: center; margin-bottom: 30px;">🏆 BOSS LEVEL - PEEL Paragraph</h2>
+
+            <div class="passage">
+                <h2>HOW FAST FASHION IS A TOXIC TREND</h2>
+                <p><em>(Full text available above - scroll to reference)</em></p>
+            </div>
+
+            <div class="boss-rubric">
+                <h4>📋 Your Task: Write a complete PEEL paragraph answering:</h4>
+                <p><strong>"How does the author use stylistic devices to support the author's viewpoint?"</strong></p>
+                <h4 style="margin-top: 15px;">✅ Requirements (5 marks):</h4>
+                <ul>
+                    <li><strong>Point (1 mark):</strong> Identify the metaphor "toxic cycle" and state the viewpoint</li>
+                    <li><strong>Evidence (1 mark):</strong> Quote paragraph 2 fully</li>
+                    <li><strong>Explanation (2 marks):</strong> Explain how the metaphor conveys harm and repetition</li>
+                    <li><strong>Link (1 mark):</strong> Connect back to the argument about fast fashion</li>
+                </ul>
+            </div>
+
+            <textarea class="boss-textarea" id="bossAnswer" placeholder="Type your PEEL paragraph here..."></textarea>
+
+            <button class="submit-btn" onclick="submitBossLevel()">📝 Submit for Review</button>
+
+            <div class="score-display" id="bossResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // Answer key
+        const answers = {
+            mc: { q1: 'a', q2: 'c', q3: 'a', q4: 'd', q5: 'c', q6: 'c', q7: 'a', q8: 'c', q9: 'a', q10: 'd' },
+            tf: { tf1: 'true', tf2: 'true', tf3: 'true', tf4: 'true', tf5: 'true' }
+        };
+
+        // Cloze words
+        const clozeWords = ['metaphor', 'toxic', 'cycle', 'destructive', 'powerfully', 'conveys', 'harmful', 'repetitive', 'trapped', 'consumption', 'escape'];
+        const redHerrings = ['simile', 'positive', 'pattern', 'beneficial', 'weakly', 'hides', 'helpful', 'single', 'free', 'saving', 'continue'];
+        const allWords = [...clozeWords, ...redHerrings].sort(() => Math.random() - 0.5);
+
+        // Track scoring
+        const firstAttempt = {};
+        let earnedPoints = { mc: 0, tf: 0, cloze: 0 };
+        const clozeFirstAttempt = {};
+        let draggedWord = null;
+        let selectedTouchWord = null;
+
+        // Initialize word bank
+        function initWordBank() {
+            const wordBank = document.getElementById('wordBank');
+            allWords.forEach(word => {
+                const chip = document.createElement('div');
+                chip.className = 'word-chip';
+                chip.textContent = word;
+                chip.draggable = true;
+                chip.addEventListener('dragstart', handleDragStart);
+                chip.addEventListener('dragend', handleDragEnd);
+                chip.addEventListener('touchstart', handleTouchStart);
+                chip.addEventListener('touchend', handleTouchEnd);
+                wordBank.appendChild(chip);
+            });
+
+            const blanks = document.querySelectorAll('.blank');
+            blanks.forEach((blank, index) => {
+                blank.id = `blank-${index}`;
+                blank.addEventListener('dragover', handleDragOver);
+                blank.addEventListener('dragleave', handleDragLeave);
+                blank.addEventListener('drop', handleDrop);
+                blank.addEventListener('click', () => {
+                    if (selectedTouchWord) {
+                        handleTouchDrop(blank);
+                    } else if (blank.textContent) {
+                        const word = blank.textContent;
+                        const chip = Array.from(document.querySelectorAll('.word-chip')).find(c => c.textContent === word);
+                        if (chip) chip.classList.remove('used');
+                        blank.textContent = '';
+                        blank.classList.remove('filled');
+                        blank.style.backgroundColor = 'white';
+                        blank.style.borderColor = '#667eea';
+                    }
+                });
+            });
+        }
+
+        function handleTouchStart(e) {
+            if (e.target.classList.contains('used')) return;
+            if (selectedTouchWord) selectedTouchWord.classList.remove('selected-touch');
+            selectedTouchWord = e.target;
+            e.target.classList.add('selected-touch');
+        }
+
+        function handleTouchEnd(e) {}
+
+        function handleDragStart(e) {
+            if (e.target.classList.contains('used')) {
+                e.preventDefault();
+                return;
+            }
+            draggedWord = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', e.target.textContent);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const blank = e.currentTarget;
+            blank.classList.remove('drag-over');
+            if (!draggedWord) return;
+            fillBlankWithWord(blank, draggedWord);
+            draggedWord = null;
+        }
+
+        function handleTouchDrop(blank) {
+            if (!selectedTouchWord) return;
+            fillBlankWithWord(blank, selectedTouchWord);
+            selectedTouchWord.classList.remove('selected-touch');
+            selectedTouchWord = null;
+        }
+
+        function fillBlankWithWord(blank, wordChip) {
+            const word = wordChip.textContent;
+            const blankId = blank.id;
+            const correctAnswer = blank.getAttribute('data-answer');
+            const isFirstAttempt = !clozeFirstAttempt[blankId];
+            if (isFirstAttempt) clozeFirstAttempt[blankId] = true;
+
+            if (blank.textContent) {
+                const oldWord = blank.textContent;
+                const oldChip = Array.from(document.querySelectorAll('.word-chip')).find(chip => chip.textContent === oldWord);
+                if (oldChip) oldChip.classList.remove('used');
+            }
+
+            blank.textContent = word;
+            blank.classList.add('filled');
+            wordChip.classList.add('used');
+
+            if (word === correctAnswer) {
+                blank.style.backgroundColor = '#d4edda';
+                blank.style.borderColor = '#28a745';
+                if (isFirstAttempt) {
+                    earnedPoints.cloze += (5 / clozeWords.length);
+                }
+            } else {
+                blank.style.backgroundColor = '#f8d7da';
+                blank.style.borderColor = '#dc3545';
+            }
+        }
+
+        function toggleHint(id) {
+            document.getElementById(`hint-${id}`).classList.toggle('show');
+        }
+
+        function toggleReference(id) {
+            document.getElementById(`ref-${id}`).classList.toggle('show');
+        }
+
+        function selectOption(option, questionId) {
+            const radio = option.querySelector('input[type="radio"]');
+            const selectedValue = radio.value;
+            const correctValue = answers.mc[questionId];
+            const isFirstAttempt = !firstAttempt[questionId];
+            if (isFirstAttempt) firstAttempt[questionId] = true;
+
+            const allOptions = option.parentElement.querySelectorAll('.option');
+            allOptions.forEach(opt => opt.classList.remove('correct', 'incorrect'));
+
+            if (selectedValue === correctValue) {
+                option.classList.add('correct');
+                if (isFirstAttempt) earnedPoints.mc++;
+            } else {
+                option.classList.add('incorrect');
+                allOptions.forEach(opt => {
+                    const optRadio = opt.querySelector('input[type="radio"]');
+                    if (optRadio.value === correctValue) {
+                        opt.style.borderColor = '#28a745';
+                        opt.style.borderWidth = '3px';
+                    }
+                });
+            }
+            radio.checked = true;
+        }
+
+        function selectTF(button, questionId, value) {
+            const parent = button.parentElement;
+            const buttons = parent.querySelectorAll('.tf-button');
+            const correctValue = answers.tf[questionId];
+            const isFirstAttempt = !firstAttempt[questionId];
+            if (isFirstAttempt) firstAttempt[questionId] = true;
+
+            buttons.forEach(btn => btn.classList.remove('correct', 'incorrect'));
+
+            if (value === correctValue) {
+                button.classList.add('correct');
+                if (isFirstAttempt) earnedPoints.tf++;
+            } else {
+                button.classList.add('incorrect');
+                buttons.forEach(btn => {
+                    if (btn.textContent.toLowerCase() === correctValue) {
+                        btn.style.borderColor = '#28a745';
+                        btn.style.borderWidth = '3px';
+                    }
+                });
+            }
+        }
+
+        function submitTest() {
+            const totalScore = earnedPoints.mc + earnedPoints.tf + Math.round(earnedPoints.cloze);
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.innerHTML = `
+                <strong>Your Final Score: ${totalScore}/20</strong><br>
+                Multiple Choice: ${earnedPoints.mc}/10<br>
+                True/False: ${earnedPoints.tf}/5<br>
+                PEEL Paragraph: ${Math.round(earnedPoints.cloze)}/5<br>
+                <br>
+                Percentage: ${Math.round(totalScore/20*100)}%
+            `;
+            scoreDisplay.classList.add('show');
+            document.getElementById('bossUnlock').classList.add('show');
+            scoreDisplay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function startBossLevel() {
+            document.getElementById('mainQuiz').classList.add('hidden');
+            document.getElementById('bossLevel').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function backFromBoss() {
+            document.getElementById('bossLevel').classList.add('hidden');
+            document.getElementById('mainQuiz').classList.remove('hidden');
+            document.getElementById('scoreDisplay').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function submitBossLevel() {
+            const answer = document.getElementById('bossAnswer').value;
+            if (answer.trim().length < 100) {
+                alert('Your answer seems too short. A PEEL paragraph should be at least 100 words.');
+                return;
+            }
+            const resultDisplay = document.getElementById('bossResult');
+            resultDisplay.innerHTML = `
+                <strong>✅ Boss Level Submitted!</strong><br>
+                Your answer has been recorded for review.<br><br>
+                <strong>Self-Check:</strong><br>
+                ✓ Did you include a clear Point?<br>
+                ✓ Did you provide specific Evidence (a quote)?<br>
+                ✓ Did you Explain HOW the device supports the viewpoint?<br>
+                ✓ Did you Link back to the main argument?<br><br>
+                Word count: ${answer.split(/\s+/).length} words
+            `;
+            resultDisplay.classList.add('show');
+            resultDisplay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initWordBank();
+        });
+    </script>
+</body>
+</html>
